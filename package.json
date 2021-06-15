@@ -1,0 +1,33 @@
+{
+  "name": "pager",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "run-p dev:*",
+    "dev:server": "nodemon src/index.js",
+    "dev:css": "postcss src/**/*.css --base src --dir public/build -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cookie": "^0.4.1",
+    "jsonwebtoken": "^8.5.1",
+    "polka": "^1.0.0-next.15",
+    "sirv": "^1.0.12"
+  },
+  "devDependencies": {
+    "better-sqlite3": "^7.4.1",
+    "nodemon": "^2.0.7",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.3.2",
+    "postcss-cli": "^8.3.1",
+    "rollup": "^2.51.2",
+    "tailwindcss": "^2.1.4",
+    "vite": "^2.3.7"
+  }
+}
