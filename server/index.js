@@ -23,17 +23,15 @@ app.use(vite.middlewares);
 
 async function serveFile(req, res, file) {
   const url = req.originalUrl;
-  console.log(url.trimStart("/") + ".html");
 
   try {
     // 1. Read index.html
-    let template = fs.readFileSync(path.resolve(__dirname, file), "utf-8");
+    let template = fs.readFileSync(path.resolve(__dirname, "../src", file), "utf-8");
 
     // 2. Apply vite HTML transforms. This injects the vite HMR client, and
     //    also applies HTML transforms from Vite plugins, e.g. global preambles
     //    from @vitejs/plugin-react-refresh
     let updated = await vite.transformIndexHtml(url, template);
-    console.log(template);
 
     // 6. Send the rendered HTML back.
     res.writeHead(200, {
@@ -77,6 +75,22 @@ app.get("/", async (req, res) => {
 
 app.get("/login", async (req, res) => {
   await serveFile(req, res, "login.html");
+});
+
+app.post("/login", async (req, res) => {
+  console.log(req.body);
+  res.writeHead(303, {
+    location: "/",
+  });
+  res.end();
+  return;
+  res.end(
+    JSON.stringify({
+      data: {
+        message: "Welcome!",
+      },
+    }),
+  );
 });
 
 app.get("/signup", async (req, res) => {

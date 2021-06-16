@@ -5,9 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "run-p dev:*",
-    "dev:server": "nodemon src/index.js",
-    "dev:css": "postcss src/**/*.css --base src --dir public/build -w"
+    "dev": "nodemon server/index.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +14,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cookie": "^0.4.1",
+    "formee": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "polka": "^1.0.0-next.15",
     "sirv": "^1.0.12"
