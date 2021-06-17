@@ -15,9 +15,11 @@
     "body-parser": "^1.19.0",
     "cookie": "^0.4.1",
     "formee": "^1.0.0",
+    "htm": "^3.0.4",
     "jsonwebtoken": "^8.5.1",
     "polka": "^1.0.0-next.15",
-    "sirv": "^1.0.12"
+    "sirv": "^1.0.12",
+    "vhtml": "^2.2.0"
   },
   "devDependencies": {
     "better-sqlite3": "^7.4.1",

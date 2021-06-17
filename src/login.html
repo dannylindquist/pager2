@@ -14,7 +14,16 @@
       <form id="login-form" action="/login" method="post">
         <label class="block mt-2" for="email">Email: </label>
         <input
-          class="focus:outline-none focus:ring-2 focus:ring-gray-100 block w-full bg-gray-700 py-3 px-2 rounded"
+          class="
+            focus:outline-none
+            focus:ring-2 focus:ring-gray-100
+            block
+            w-full
+            bg-gray-700
+            py-3
+            px-2
+            rounded
+          "
           autocomplete="email"
           type="email"
           name="email"
@@ -22,14 +31,39 @@
         />
         <label class="block mt-2" for="passoword">Password:</label>
         <input
-          class="focus:outline-none focus:ring-2 focus:ring-gray-100 block w-full bg-gray-700 py-3 px-2 rounded"
+          class="
+            focus:outline-none
+            focus:ring-2 focus:ring-gray-100
+            block
+            w-full
+            bg-gray-700
+            py-3
+            px-2
+            rounded
+          "
           autocomplete="current-password"
           type="password"
           name="password"
           id="password"
         />
-        <input class="focus:outline-none focus:ring-2 focus:ring-gray-100 mt-2 bg-gray-700 block mx-auto px-8 py-3" type="submit" value="Log in" />
+        <input
+          class="
+            focus:outline-none
+            focus:ring-2 focus:ring-gray-100
+            mt-2
+            bg-gray-700
+            block
+            mx-auto
+            px-8
+            py-3
+          "
+          type="submit"
+          value="Log in"
+        />
       </form>
+      <p class="text-center text-gray-300">
+        <a class="underline" href="/signup">Don't have an account? Sign up</a>
+      </p>
     </main>
     <script type="module" src="/src/login.js" defer></script>
   </body>
