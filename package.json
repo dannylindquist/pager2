@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server/index.js"
+    "dev": "nodemon -w server/ server/index.js"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +14,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cookie": "^0.4.1",
+    "dotenv": "^10.0.0",
     "formee": "^1.0.0",
     "htm": "^3.0.4",
     "jsonwebtoken": "^8.5.1",

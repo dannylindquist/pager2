@@ -14,11 +14,13 @@ export function validateDB() {
       email text unique,
       password text,
       createdOn integer
-    )`,
+    )`
       )
       .run();
 
-    sql.prepare(`
+    sql
+      .prepare(
+        `
       create table alert(
         alertId integer primary key,
         userId integer,
@@ -26,7 +28,9 @@ export function validateDB() {
         timestamp integer,
         foreign key(userId) references user(userId)
       )
-    `);
+    `
+      )
+      .run();
   }
 }
 
@@ -38,7 +42,7 @@ export function createUser(email, password) {
         insert into user(email, password, createdOn) values(
           ?,?,?
         )
-      `,
+      `
       )
       .run(email, password, Date.now());
     return result.lastInsertRowid;
@@ -55,7 +59,7 @@ export function getUser(email) {
       .prepare(
         `
         select * from user where email = ?
-      `,
+      `
       )
       .get(email);
     return result;
@@ -63,5 +67,58 @@ export function getUser(email) {
     console.log(err);
   }
 
+  return null;
+}
+
+export function getNumbers(userId) {
+  try {
+    let result = sql
+      .prepare(
+        `
+      select * from alert where  userId = ?
+    `
+      )
+      .all(userId);
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+}
+
+export function removeNumber(userId, alertId) {
+  try {
+    let result = sql
+      .prepare(
+        `
+      delete from alert where alertId = ? and userId = ?
+    `
+      )
+      .run(alertId, userId);
+    return result.changes > 0;
+  } catch (err) {
+    console.log(err);
+  }
+  return false;
+}
+
+export function putNumber(userId, number) {
+  try {
+    let result = sql
+      .prepare(
+        `
+      insert into alert(userId, content, timestamp) values (?, ?, ?)
+    `
+      )
+      .run(userId, number, Date.now());
+    if (result.lastInsertRowid > 0) {
+      let value = sql
+        .prepare(`select * from alert where userId = ? and alertId = ?`)
+        .get(userId, result.lastInsertRowid);
+      return value;
+    }
+  } catch (err) {
+    console.log(err);
+  }
   return null;
 }

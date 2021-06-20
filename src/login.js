@@ -20,7 +20,9 @@ formee.bind(form, {
       },
       body: JSON.stringify(object),
     });
-    console.log(result);
+    if (result.ok) {
+      window.location = "/";
+    }
   },
   onError: (event) => {
     console.log("error", event.errors);
