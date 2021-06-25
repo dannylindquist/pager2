@@ -20,17 +20,24 @@ import {
   displayPage,
   insertNumber,
   realTimeMessages,
+  homePage,
 } from "./controllers/messages.js";
 import dotenv from "dotenv";
 import sirv from "sirv";
 import compression from "compression";
 
+let compress = compression();
 dotenv.config();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 validateDB();
 
-let app = polka();
+let app = polka({
+  onError: function (err, req, res, next) {
+    console.log(err);
+    next();
+  },
+});
 
 app.use(bodyparser.json());
 
@@ -73,7 +80,6 @@ if (process.env.NODE_ENV !== "production") {
   let cache = new Map();
   let assets = sirv("dist/assets");
   app.use("assets", assets);
-  app.use(compression());
 
   app.use((req, res, next) => {
     res.render = async (file) => {
@@ -109,28 +115,19 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", async (req, res) => {
-  if (!req.userId) {
-    res.writeHead(302, {
-      location: "/login",
-    });
-    res.end();
-    return;
-  }
-  await res.render("index.html");
-});
+app.get("/", compress, homePage);
 
 app.post("/login", loginUser);
 
-app.get("/signup", signupForm);
+app.get("/signup", compress, signupForm);
 
 app.post("/signup", signupUser);
 
-app.get("/login", loginForm);
+app.get("/login", compress, loginForm);
 
 app.post("/logout", logout);
 
-app.get("/control", controlPage);
+app.get("/control", compress, controlPage);
 
 app.post("/messages", insertNumber);
 
@@ -138,7 +135,7 @@ app.get("/messages", realTimeMessages);
 
 app.delete("/messages", removeMessage);
 
-app.get("/display", displayPage);
+app.get("/display", compress, displayPage);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log("started");

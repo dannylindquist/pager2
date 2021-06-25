@@ -62,6 +62,20 @@ export async function controlPage(req, res) {
 /**
  * @type {import("../types").RequestHandler}
  */
+export async function homePage(req, res) {
+  if (!req.userId) {
+    res.writeHead(302, {
+      location: "/login",
+    });
+    res.end();
+    return;
+  }
+  await res.render("index.html");
+}
+
+/**
+ * @type {import("../types").RequestHandler}
+ */
 export async function displayPage(req, res) {
   if (!req.userId) {
     res.writeHead(302, {
@@ -85,6 +99,9 @@ export async function realTimeMessages(req, res) {
   res.writeHead(200, headers);
 
   let messages = getNumbers(req.userId);
+  console.log(
+    `connection sse: ${req.userId}, found: ${messages.length} messages`
+  );
   const data = `event: messages\ndata: ${JSON.stringify(messages)}\n\n`;
   if (clients.has(req.userId)) {
     clients.get(req.userId).push(res);
@@ -148,6 +165,7 @@ let clients = new Map();
 function sendRemoveNotice(userId, alertId) {
   if (clients.has(userId)) {
     clients.get(userId).forEach((res) => {
+      console.log(`sending removal: ${userId}`);
       res.write(`event: removed\ndata: ${alertId}\n\n`);
     });
   }
@@ -155,6 +173,7 @@ function sendRemoveNotice(userId, alertId) {
 function sendAddNotice(userId, alert) {
   if (clients.has(userId)) {
     clients.get(userId).forEach((res) => {
+      console.log(`sending update: ${userId}`);
       res.write(`event: added\ndata: ${JSON.stringify(alert)}\n\n`);
     });
   }
