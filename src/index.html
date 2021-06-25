@@ -8,18 +8,18 @@
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>📟</text></svg>"
     />
-    <link rel="preconnect" href="https://rsms.me/inter/inter.css" />
     <link rel="stylesheet" href="/src/styles.css" />
-    <link
-      rel="stylesheet"
-      href="https://rsms.me/inter/inter.css"
-      crossorigin="anonymous"
-    />
   </head>
   <body class="bg-gray-900 text-gray-100">
     <div class="flex px-4 pt-2">
       <div class="flex-1">
-        <button>Logout</button>
+        <form action="/logout" method="post">
+          <input
+            class="bg-transparent cursor-pointer"
+            type="submit"
+            value="Logout"
+          />
+        </form>
       </div>
       <div>
         <h1 class="text-xl font-semibold">Pager</h1>

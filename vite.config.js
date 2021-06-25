@@ -2,19 +2,28 @@
 import { resolve, dirname } from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import { minifyHtml } from "vite-plugin-html";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 var files = fs.readdirSync("./src").filter((x) => x.endsWith(".html"));
-console.log(files);
+let inputs = {};
+for (let i = 0; i < files.length; i++) {
+  let file = files[i].substr(0, files[i].length - 5);
+  inputs[file] = resolve(__dirname, `src/${files[i]}`);
+}
+console.log(inputs);
 
-export default {
+/**
+ * @type {import('vite').UserConfig}
+ */
+const config = {
+  plugins: [minifyHtml()],
   build: {
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, "src/signup.html"),
-        nested: resolve(__dirname, "src/login.html"),
-      },
+      input: inputs,
     },
   },
 };
+
+export default config;

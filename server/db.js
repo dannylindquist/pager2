@@ -1,8 +1,11 @@
 import Database from "better-sqlite3";
 
-let sql = new Database("./data.db");
+let dbPath =
+  process.env.NODE_ENV === "production" ? "/data/data.db" : "./data.db";
+let sql = new Database(dbPath);
 
 export function validateDB() {
+  sql.pragma("journal_mode = WAL");
   let tables = sql.prepare(`select name from sqlite_master`).all();
   console.log(tables);
   if (!tables.find((x) => x.name === "user")) {
