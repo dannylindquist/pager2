@@ -4,8 +4,20 @@ update to [pager](https://github.com/dannylindquist/pager)
 
 ### development
 
-`npm install`
-`npm run dev`
+create a `.env` file in root.
+
+```
+//.env
+COOKIE_SECRET=MY_COOKIE_SECRET
+```
+
+may require node > 14  
+testing done on node@16
+
+```javascript
+npm install
+npm run dev
+```
 
 ### prod
 
