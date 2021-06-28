@@ -5,9 +5,6 @@ app = "pager"
 kill_signal = "SIGINT"
 kill_timeout = 5
 
-[build]
-  builtin = "node"
-
 [env]
 
 [experimental]
@@ -40,7 +37,7 @@ kill_timeout = 5
     timeout = "2s"
 
 [statics]
-  guest_path = "/dist/assets"
+  guest_path = "/app/dist/assets"
   url_prefix = "/assets"
 
 [mounts]

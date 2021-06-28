@@ -3,7 +3,6 @@ import cookie from "cookie";
 import jwt from "jsonwebtoken";
 import { default as bodyparser } from "body-parser";
 import { promises as fsp, default as fs } from "fs";
-import { createServer as createViteServer } from "vite";
 import { dirname, default as path } from "path";
 import { fileURLToPath } from "url";
 import { validateDB } from "./db.js";
@@ -42,7 +41,8 @@ let app = polka({
 app.use(bodyparser.json());
 
 if (process.env.NODE_ENV !== "production") {
-  const vite = await createViteServer({
+  const { createServer } = await import("vite");
+  const vite = await createServer({
     server: { middlewareMode: "ssr" },
   });
   app.use(vite.middlewares);
