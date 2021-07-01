@@ -38,6 +38,18 @@ let app = polka({
   },
 });
 
+app.use((req, res, next) => {
+  var protocol = req.headers["x-forwarded-proto"];
+  if (protocol && protocol !== "https") {
+    res.writeHead(302, {
+      location: "https://" + req.headers["host"] + req.url,
+    });
+    res.end();
+  } else {
+    next();
+  }
+});
+
 app.use(bodyparser.json());
 
 if (process.env.NODE_ENV !== "production") {
