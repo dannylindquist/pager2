@@ -90,7 +90,10 @@ if (process.env.NODE_ENV !== "production") {
   }
 } else {
   let cache = new Map();
-  let assets = sirv("dist/assets");
+  let assets = sirv("dist/assets", {
+    maxAge: 31536000, // 1Y
+    immutable: true,
+  });
   app.use("assets", assets);
 
   app.use((req, res, next) => {

@@ -22,6 +22,9 @@ const config = {
   build: {
     rollupOptions: {
       input: inputs,
+      output: {
+        manualChunks: undefined,
+      },
     },
   },
 };

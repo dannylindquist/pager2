@@ -1,9 +1,17 @@
+// @ts-check
+/**
+ * @type {HTMLFormElement}
+ */
+// @ts-ignore
 let form = document.getElementById("number-add-form");
 let numbers = document.getElementById("number-list");
-let es = new EventSource("/messages");
 let activeMessages = [];
 
 function insertItem(alert) {
+  let existing = numbers.querySelector(`[data-item="${alert.alertId}"]`);
+  if (existing) {
+    return;
+  }
   let container = document.createElement("div");
   container.classList.add(
     "flex",
@@ -32,6 +40,9 @@ function insertItem(alert) {
 }
 
 function renderItems() {
+  while (numbers.firstChild) {
+    numbers.removeChild(numbers.firstChild);
+  }
   for (let item of activeMessages) {
     insertItem(item);
   }
@@ -57,6 +68,7 @@ form.addEventListener("submit", async (event) => {
 
   let data = Object.fromEntries(new FormData(form).entries());
 
+  // @ts-ignore
   if (data.entry.length === 0) {
     return;
   }
@@ -77,22 +89,46 @@ form.addEventListener("submit", async (event) => {
   form.reset();
 });
 
-es.addEventListener("messages", function (e) {
+function messagesAll(e) {
   activeMessages = JSON.parse(e.data);
   renderItems();
-});
-
-es.addEventListener("added", function (e) {
+}
+function messageAdded(e) {
   let alert = JSON.parse(e.data);
   console.log(alert);
   activeMessages.push(alert);
   insertItem(alert);
-});
-
-es.addEventListener("removed", function (e) {
+}
+function messageRemoved(e) {
   let alertId = +e.data;
   let item = numbers.querySelector(`[data-item="${alertId}"]`);
   if (item) {
     numbers.removeChild(item);
+  }
+}
+
+/**
+ * @type {EventSource}
+ */
+let es;
+function startListening() {
+  if (es) {
+    es.removeEventListener("messages", messagesAll);
+    es.removeEventListener("added", messageAdded);
+    es.removeEventListener("removed", messageRemoved);
+    es.close();
+    es = null;
+  }
+  es = new EventSource("/messages");
+  es.addEventListener("messages", messagesAll);
+  es.addEventListener("added", messageAdded);
+  es.addEventListener("removed", messageRemoved);
+}
+
+startListening();
+
+document.addEventListener("visibilitychange", (event) => {
+  if (document.visibilityState == "visible") {
+    startListening();
   }
 });

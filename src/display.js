@@ -1,10 +1,10 @@
+// @ts-check
 import fitty from "fitty";
 
 let displayEl = document.getElementById("shown-number");
 fitty(displayEl, {
   maxSize: 1000,
 });
-let es = new EventSource("/messages");
 let activeMessages = [];
 let index = 0;
 
@@ -30,19 +30,45 @@ function evaluateNumbers() {
   }
 }
 
-es.addEventListener("messages", function (e) {
+function receiveAllMessages(e) {
   activeMessages = JSON.parse(e.data);
   evaluateNumbers();
-});
+}
 
-es.addEventListener("added", function (e) {
+function receiveNewMessage(e) {
   let alert = JSON.parse(e.data);
   activeMessages.push(alert);
   evaluateNumbers();
-});
+}
 
-es.addEventListener("removed", function (e) {
+function receiveRemoveMessage(e) {
   let alertId = +e.data;
   activeMessages = activeMessages.filter((x) => x.alertId !== alertId);
   evaluateNumbers();
+}
+
+/**
+ * @type {EventSource}
+ */
+let es;
+function startListening() {
+  if (es) {
+    es.removeEventListener("message", receiveAllMessages);
+    es.removeEventListener("added", receiveNewMessage);
+    es.removeEventListener("removed", receiveRemoveMessage);
+    es.close();
+    es = null;
+  }
+  es = new EventSource("/messages");
+  es.addEventListener("messages", receiveAllMessages);
+  es.addEventListener("added", receiveNewMessage);
+  es.addEventListener("removed", receiveRemoveMessage);
+}
+
+document.addEventListener("visibilitychange", (event) => {
+  if (document.visibilityState == "visible") {
+    startListening();
+  }
 });
+
+startListening();

@@ -138,6 +138,7 @@ export async function insertNumber(req, res) {
     );
     return;
   }
+  console.log(req.body);
   let alert = putNumber(req.userId, req.body.entry.toUpperCase());
   if (alert !== null) {
     sendAddNotice(req.userId, alert);
